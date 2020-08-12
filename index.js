@@ -1,3 +1,4 @@
+// @ts-nocheck
 /*
   EXAMPLE TASK:
     - Write an Airplane constructor that initializes `name` from an argument.
@@ -45,10 +46,10 @@ function Person(attributes) {
   this.stomach = [];
 }
 Person.prototype.eat = function(someFood){
-  if(this.stomach.length >= 10){
-    this.stomach.length = 10;
-  }else {
+  if(this.stomach.length < 10){
     this.stomach.push(someFood);
+  }else{
+    console.log("I can't eat another bite.")
   }
 };
 Person.prototype.poop = function(){
@@ -76,6 +77,8 @@ newPerson1.eat('chowder');
 console.log(newPerson1);
 console.log(newPerson1.toString());
 // newPerson1.poop();
+console.log(newPerson1)
+console.log("");
 /*
   TASK 2
     - Write a Car constructor that initializes `model` and `milesPerGallon` from arguments.
@@ -96,6 +99,29 @@ function Car(attributes) {
   this.tank = 0;
   this.odometer = 0;
 }
+Car.prototype.fill = function(gallons){
+  this.tank += gallons; // '+=' take info from the left, adds info from the right and then pushes everything to the left.
+}
+Car.prototype.drive = function(milesDriven){
+  const gasTank = Math.round(this.tank - milesDriven);
+  const milesToGo = this.tank * this.milesPerGallon;
+
+  if(gasTank > 0){
+    this.tank = gasTank;
+    this.odometer = this.odometer + milesDriven;
+    return (`I can still go ${milesToGo} before running out of fuel.`);
+  }else {
+    this.tank = 0;
+    this.odometer = milesToGo;
+    return (`I ran out of fuel at ${this.odometer} miles!`);
+  }
+};
+
+const newCar1 = new Car({model:'Bradley Tank', milesPerGallon:14});
+newCar1.fill(56);
+console.log(newCar1);
+console.log(newCar1.drive(800));
+console.log("");
 
 /*
   TASK 3
@@ -104,10 +130,20 @@ function Car(attributes) {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
 
+function Baby (name, age, favoriteToy) {
+  this.name=name;
+  this.age=age;
+  this.favoriteToy = favoriteToy;
 }
 
+Baby.prototype.play = function(){
+  return (`${this.name} is playing with ${this.favoriteToy}.`)
+}
+Baby.prototype = Object.create(Person.prototype);
+
+const newBaby1 = new Baby ({name:'james', age: 4, favoriteToy:'train'})
+console.log(newBaby1)
 /* 
   TASK 4
 
