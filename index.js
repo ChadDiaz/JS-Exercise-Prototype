@@ -103,19 +103,19 @@ Car.prototype.fill = function(gallons){
   this.tank += gallons; // '+=' take info from the left, adds info from the right and then pushes everything to the left.
 }
 Car.prototype.drive = function(milesDriven){
-  const gasTank = Math.round(this.tank - milesDriven);
-  const milesToGo = this.tank * this.milesPerGallon;
-
-  if(gasTank > 0){
-    this.tank = gasTank;
-    this.odometer = this.odometer + milesDriven;
-    return (`I can still go ${milesToGo} before running out of fuel.`);
-  }else {
-    this.tank = 0;
-    this.odometer = milesToGo;
-    return (`I ran out of fuel at ${this.odometer} miles!`);
-  }
-};
+  if (this.tank - milesDriven / this.milesPerGallon <= 0){
+    for(let i = milesDriven; i > 0; i --){
+      if(this.tank - i / this.milesPerGallon === 0){
+        this.tank =0;
+        this.odometer +=i;
+        return (`I ran out of fuel at ${this.odometer} miles!`);
+        }
+      }        
+   }else {
+  this.tank -= milesDriven / this.milesPerGallon;
+  this.odometer += milesDriven;
+}
+}; 
 
 const newCar1 = new Car({model:'Bradley Tank', milesPerGallon:14});
 newCar1.fill(56);
